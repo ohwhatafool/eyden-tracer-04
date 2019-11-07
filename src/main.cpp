@@ -24,10 +24,11 @@ Mat RenderFrame(void)
 	// Define a scene
 	CScene scene;
 
-	// Load scene description 
+	// Load scene description
 	scene.ParseOBJ("../data/cone32.obj");
-//	scene.ParseOBJ("../data/barney.obj");
-//	scene.ParseOBJ("../data/ground.obj");
+	//scene.ParseOBJ("../data/cylinder16.obj");
+	//	scene.ParseOBJ("../data/barney.obj");
+	//	scene.ParseOBJ("../data/ground.obj");
 
 #ifdef ENABLE_BSP
 	// Build BSPTree
@@ -56,25 +57,26 @@ Mat RenderFrame(void)
 
 	// --- End description for 4.2 ---
 
-
-	Mat img(scene.m_pCamera->getResolution(), CV_32FC3);		// image array
-	Ray ray;                                          			// primary ray
-
+	Mat img(scene.m_pCamera->getResolution(), CV_32FC3); // image array
+	Ray ray;											 // primary ray
 
 #ifdef ENABLE_SUPERSAMPLING
 	auto sampleGenerator = std::make_unique<CSampleGeneratorRegular>();
-//	auto sampleGenerator = std::make_unique<CSampleGeneratorRandom>();
-//	auto sampleGenerator = std::make_unique<CSampleGeneratorStratified>();
+	//	auto sampleGenerator = std::make_unique<CSampleGeneratorRandom>();
+	//	auto sampleGenerator = std::make_unique<CSampleGeneratorStratified>();
 	int nSamples = 16;
 
-	for (int y = 0; y < img.rows; y++) {
-		for (int x = 0; x < img.cols; x++) {
+	for (int y = 0; y < img.rows; y++)
+	{
+		for (int x = 0; x < img.cols; x++)
+		{
 			// --- PUT YOUR CODE HERE ---
 		}
 	}
 #else
 	for (int y = 0; y < img.rows; y++)
-		for (int x = 0; x < img.cols; x++) {
+		for (int x = 0; x < img.cols; x++)
+		{
 			scene.m_pCamera->InitRay(x, y, ray); // initialize ray
 			img.at<Vec3f>(y, x) = scene.RayTrace(ray);
 		}
@@ -84,7 +86,7 @@ Mat RenderFrame(void)
 	return img;
 }
 
-int main(int argc, char* argv[])
+int main(int argc, char *argv[])
 {
 	Mat img = RenderFrame();
 	imshow("Image", img);

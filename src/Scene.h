@@ -18,26 +18,27 @@ public:
 	 * @param camera The reference to the camera
 	 * @todo Background may be image
 	 */
-	CScene(Vec3f bgColor = RGB(0,0,0))
-		// camera 4.1 
+	CScene(Vec3f bgColor = RGB(0, 0, 0))
+		// camera 4.1
 		: m_pCamera(std::make_unique<CCameraPerspective>(Vec3f(0, 0, -0.8), Vec3f(0, 0, 1), Vec3f(0, 1, 0), 60, Size(800, 600)))
-		// camera 4.2
-		//: m_pCamera(std::make_unique<CCameraPerspective>(Vec3f(0, 0, 10), Vec3f(0, 0, -1), Vec3f(0, 1, 0), 60, Size(800, 600)))
-		// camera 4.3
-		//: m_pCamera(std::make_unique<CCameraPerspective>(Vec3f(0, 8, 25), Vec3f(0, 0, -1), Vec3f(0, 1, 0), 60, Size(800, 600)))
-		// camera 4.4
-		//: m_pCamera(std::make_unique<CCameraPerspective>(Vec3f(0, 1.6f, 25), Vec3f(0, 0, -1), Vec3f(0, 1, 0), 60, Size(800, 600)))
-		, m_bgColor(bgColor)
-	{}
-  	~CScene(void) = default;
-  
-	
+		  // camera 4.2
+		  //: m_pCamera(std::make_unique<CCameraPerspective>(Vec3f(0, 0, 10), Vec3f(0, 0, -1), Vec3f(0, 1, 0), 60, Size(800, 600)))
+		  // camera 4.3
+		  //: m_pCamera(std::make_unique<CCameraPerspective>(Vec3f(0, 8, 25), Vec3f(0, 0, -1), Vec3f(0, 1, 0), 60, Size(800, 600)))
+		  // camera 4.4
+		  //: m_pCamera(std::make_unique<CCameraPerspective>(Vec3f(0, 1.6f, 25), Vec3f(0, 0, -1), Vec3f(0, 1, 0), 60, Size(800, 600)))
+		  ,
+		  m_bgColor(bgColor)
+	{
+	}
+	~CScene(void) = default;
+
 	/**
 	 * @brief Loads the primitives from an .obj file and adds them to the scene
 	 * @param fileName The full path to the .obj file
 	 */
-	void ParseOBJ(const std::string& fileName);
-	
+	void ParseOBJ(const std::string &fileName);
+
 	/**
 	 * @brief Adds a new primitive to the scene
 	 * @param prim Pointer to the primitive
@@ -54,21 +55,21 @@ public:
 	{
 		m_vpLights.push_back(pLight);
 	}
-  
+
 	/**
 	 * @brief Checks intersection of ray \b ray with all contained objects
 	 * @param ray The ray
 	 * @retval true If ray \b ray intersects any object
 	 * @retval false otherwise
 	 */
-	bool Intersect(Ray& ray) const
+	bool Intersect(Ray &ray) const
 	{
 #ifdef ENABLE_BSP
 		return m_pBSPTree->Intersect(ray);
 #else
 		bool hit = false;
 		for (auto pPrim : m_vpPrims)
-		  hit |= pPrim->Intersect(ray);
+			hit |= pPrim->Intersect(ray);
 		return hit;
 #endif
 	}
@@ -77,13 +78,14 @@ public:
 	 * @brief Find occluder
 	 * @param ray The ray
 	 */
-	bool Occluded(Ray& ray)
+	bool Occluded(Ray &ray)
 	{
 #ifdef ENABLE_BSP
 		return m_pBSPTree->Intersect(ray);
 #else
 		for (auto pPrim : m_vpPrims)
-			if (pPrim->Occluded(ray)) return true;
+			if (pPrim->Occluded(ray))
+				return true;
 		return false;
 #endif
 	}
@@ -111,26 +113,25 @@ public:
 		m_pBSPTree = std::make_unique<BSPTree>(box, m_vpPrims);
 	}
 #endif
-	
+
 	/**
 	 * @brief Traces the given ray and shade it
 	 * @param ray The ray
 	 * @return The color of the shaded ray
 	 */
-	Vec3f RayTrace(Ray& ray) const
+	Vec3f RayTrace(Ray &ray) const
 	{
 		return Intersect(ray) ? ray.hit->getShader()->Shade(ray) : m_bgColor;
 	}
 
-
 public:
-	std::unique_ptr<CCameraPerspective>		m_pCamera;
-	std::vector<std::shared_ptr<ILight>>	m_vpLights;						///< lights
-	
+	std::unique_ptr<CCameraPerspective> m_pCamera;
+	std::vector<std::shared_ptr<ILight>> m_vpLights; ///< lights
+
 private:
-	Vec3f									m_bgColor	= RGB(0, 0, 0);    	///< background color
-	std::vector<std::shared_ptr<CPrim>> 	m_vpPrims;						///< primitives
+	Vec3f m_bgColor = RGB(0, 0, 0);				   ///< background color
+	std::vector<std::shared_ptr<CPrim>> m_vpPrims; ///< primitives
 #ifdef ENABLE_BSP
-	std::unique_ptr<BSPTree>				m_pBSPTree	= nullptr;
+	std::unique_ptr<BSPTree> m_pBSPTree = nullptr;
 #endif
 };

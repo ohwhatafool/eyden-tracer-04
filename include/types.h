@@ -1,6 +1,6 @@
 #pragma once
 
-#define ENABLE_BSP
+//#define ENABLE_BSP
 /* #undef ENABLE_SUPERSAMPLING */
 
 #include <optional>
