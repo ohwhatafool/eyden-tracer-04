@@ -17,7 +17,8 @@ void CScene::ParseOBJ(const std::string &fileName)
 	{
 		std::cout << "Parsing OBJFile : " << fileName << std::endl;
 
-		std::shared_ptr<IShader> pShader = std::make_shared<CShaderEyelight>(RGB(1, 0.5f, 0));
+		//std::shared_ptr<IShader> pShader = std::make_shared<CShaderEyelight>(RGB(1, 0.5f, 0));
+		std::shared_ptr<IShader> pShader = std::make_shared<CShaderEyelightTextured>(RGB(0.5f, 0.5f, 0.5f), "../data/barney.bmp");
 		std::vector<Vec3f> vVertexes;
 
 		std::vector<Vec2f> vVts;
@@ -38,6 +39,7 @@ void CScene::ParseOBJ(const std::string &fileName)
 					ss >> v.val[i];
 				// std::cout << "Vertex: " << v << std::endl;
 				vVertexes.emplace_back(v);
+				//v*100 makes the light bloated, removing 100 and putting just v looks better
 			}
 			else if (line == "vt")
 			{
@@ -72,8 +74,10 @@ void CScene::ParseOBJ(const std::string &fileName)
 
 				//For smooth surface, add this to scene:
 				//Note to self: For recalling why we pass parameters like this, read documentation of obj file again
-				Add(std::make_shared<CPrimTriangleSmooth>(vVertexes[faceVal0.val[0] - 1], vVertexes[faceVal0.val[1] - 1], vVertexes[faceVal0.val[2] - 1], Vnormal[faceVal2.val[0] - 1], Vnormal[faceVal2.val[1] - 1], Vnormal[faceVal2.val[2] - 1], pShader));
-				//Add(std::make_shared<CPrimTriangleSmoothTextured>(vVertexes[faceVal0.val[0] - 1], vVertexes[faceVal0.val[1] - 1], vVertexes[faceVal0.val[2] - 1], Vnormal[faceVal2.val[0] - 1], Vnormal[faceVal2.val[1] - 1], Vnormal[faceVal2.val[2] - 1], vVts[faceVal1.val[0] - 1], vVts[faceVal1.val[1] - 1], vVts[faceVal1.val[2] - 1], pShader));
+
+				//Add(std::make_shared<CPrimTriangleSmooth>(vVertexes[faceVal0.val[0] - 1], vVertexes[faceVal0.val[1] - 1], vVertexes[faceVal0.val[2] - 1], Vnormal[faceVal2.val[0] - 1], Vnormal[faceVal2.val[1] - 1], Vnormal[faceVal2.val[2] - 1], pShader));
+
+				Add(std::make_shared<CPrimTriangleSmoothTextured>(vVertexes[faceVal0.val[0] - 1], vVertexes[faceVal0.val[1] - 1], vVertexes[faceVal0.val[2] - 1], Vnormal[faceVal2.val[0] - 1], Vnormal[faceVal2.val[1] - 1], Vnormal[faceVal2.val[2] - 1], vVts[faceVal1.val[0] - 1], vVts[faceVal1.val[1] - 1], vVts[faceVal1.val[2] - 1], pShader));
 
 				//Comment out regular triangles for now
 				//Vec3i f;

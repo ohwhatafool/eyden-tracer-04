@@ -15,16 +15,16 @@ public:
 	 * @param color The color of the object
 	 * @param fileName The path to the file with texture
 	 */
-	CShaderEyelightTextured(Vec3f color = RGB(0.5f, 0.5f, 0.5f), const std::string& fileName = {})
-		: CShaderEyelight(color)
-		, texture(fileName)
-	{}
+	CShaderEyelightTextured(Vec3f color = RGB(0.5f, 0.5f, 0.5f), const std::string &fileName = {})
+		: CShaderEyelight(color), texture(fileName)
+	{
+	}
 	virtual ~CShaderEyelightTextured(void) = default;
-  
-	virtual Vec3f Shade(const Ray& ray) const override
+
+	virtual Vec3f Shade(const Ray &ray) const override
 	{
 		// --- PUT YOUR CODE HERE ---
-		return Vec3f(0, 0, 0); 
+		return Vec3f(0, 0, 0);
 	}
 
 private:

@@ -20,9 +20,9 @@ public:
 	 */
 	CScene(Vec3f bgColor = RGB(0, 0, 0))
 		// camera 4.1
-		: m_pCamera(std::make_unique<CCameraPerspective>(Vec3f(0, 0, -0.8), Vec3f(0, 0, 1), Vec3f(0, 1, 0), 60, Size(800, 600)))
-		  // camera 4.2
-		  //: m_pCamera(std::make_unique<CCameraPerspective>(Vec3f(0, 0, 10), Vec3f(0, 0, -1), Vec3f(0, 1, 0), 60, Size(800, 600)))
+		//: m_pCamera(std::make_unique<CCameraPerspective>(Vec3f(0, 0, -0.8), Vec3f(0, 0, 1), Vec3f(0, 1, 0), 60, Size(800, 600)))
+		// camera 4.2
+		: m_pCamera(std::make_unique<CCameraPerspective>(Vec3f(0, 0, 10), Vec3f(0, 0, -1), Vec3f(0, 1, 0), 60, Size(800, 600)))
 		  // camera 4.3
 		  //: m_pCamera(std::make_unique<CCameraPerspective>(Vec3f(0, 8, 25), Vec3f(0, 0, -1), Vec3f(0, 1, 0), 60, Size(800, 600)))
 		  // camera 4.4
