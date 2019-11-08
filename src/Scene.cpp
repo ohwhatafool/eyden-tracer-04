@@ -20,8 +20,8 @@ void CScene::ParseOBJ(const std::string &fileName)
 		std::shared_ptr<IShader> pShader = std::make_shared<CShaderEyelight>(RGB(1, 0.5f, 0));
 		std::vector<Vec3f> vVertexes;
 
-		std::vector<Vec2f> tempuvs;
-		std::vector<Vec3f> temp_normal;
+		std::vector<Vec2f> vVts;
+		std::vector<Vec3f> Vnormal;
 
 		std::string line;
 
@@ -44,30 +44,42 @@ void CScene::ParseOBJ(const std::string &fileName)
 				Vec2f vt;
 				for (int i = 0; i < 2; i++)
 					ss >> vt.val[i];
-				tempuvs.emplace_back(vt);
+
+				//for checking
+				// std:: cout << "Vt " << vt << std::endl;
+				vVts.emplace_back(vt);
 			}
 			else if (line == "vn")
 			{
 				Vec3f vn;
 				for (int i = 0; i < 2; i++)
 					ss >> vn.val[i];
-				temp_normal.emplace_back(vn);
+
+				//std:: cout << "normal: " << vn << std::endl;
+				Vnormal.emplace_back(vn);
 			}
 			else if (line == "f")
 			{
-				Vec3i f0, f1, f2;
-				char c;
+				//save u/v/t values in faceVal0, faceVal1, faceVal2 respectively
+				Vec3i faceVal0, faceVal1, faceVal2;
+				char eatSlash;
 				for (int i = 0; i < 3; i++)
 				{
-					ss >> f0.val[i] >> c >> f1.val[i] >> c >> f2.val[i];
-					//std:: cout << i << "\t" << f0.val[i] << c << f1.val[i] << c << f2.val[i] << std::endl;
+					ss >> faceVal0.val[i] >> eatSlash >> faceVal1.val[i] >> eatSlash >> faceVal2.val[i];
 				}
 
-				Add(std::make_shared<CPrimTriangleSmoothTextured>(vVertexes[f0.val[0] - 1], vVertexes[f0.val[1] - 1], vVertexes[f0.val[2] - 1], temp_normal[f2.val[0] - 1], temp_normal[f2.val[1] - 1], temp_normal[f2.val[2] - 1], tempuvs[f1.val[0] - 1], tempuvs[f1.val[1] - 1], tempuvs[f1.val[2] - 1], pShader));
+				//std::cout << "face: " << faceVal0 << "...1 " << faceVal1 << std::endl;
 
+				//For smooth surface, add this to scene:
+				//Note to self: For recalling why we pass parameters like this, read documentation of obj file again
+				Add(std::make_shared<CPrimTriangleSmooth>(vVertexes[faceVal0.val[0] - 1], vVertexes[faceVal0.val[1] - 1], vVertexes[faceVal0.val[2] - 1], Vnormal[faceVal2.val[0] - 1], Vnormal[faceVal2.val[1] - 1], Vnormal[faceVal2.val[2] - 1], pShader));
+				//Add(std::make_shared<CPrimTriangleSmoothTextured>(vVertexes[faceVal0.val[0] - 1], vVertexes[faceVal0.val[1] - 1], vVertexes[faceVal0.val[2] - 1], Vnormal[faceVal2.val[0] - 1], Vnormal[faceVal2.val[1] - 1], Vnormal[faceVal2.val[2] - 1], vVts[faceVal1.val[0] - 1], vVts[faceVal1.val[1] - 1], vVts[faceVal1.val[2] - 1], pShader));
+
+				//Comment out regular triangles for now
 				//Vec3i f;
-				//for (int i = 0; i < 3; i++) ss >> f.val[i];
-				// std::cout << "Face: " << f << std::endl;
+				//for (int i = 0; i < 3; i++)
+				//	ss >> f.val[i];
+				//std::cout << "Face: " << f << ".. " << std::endl;
 				//Add(std::make_shared<CPrimTriangle>(vVertexes[f.val[0] - 1], vVertexes[f.val[1] - 1], vVertexes[f.val[2] - 1], pShader));
 			}
 			else

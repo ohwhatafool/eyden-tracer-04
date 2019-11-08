@@ -32,6 +32,8 @@ public:
 		// --- PUT YOUR CODE HERE ---
 		//return Vec3f(1, 0, 0);
 
+		//Reference for this formula:
+		//https://www.scratchapixel.com/lessons/3d-basic-rendering/ray-tracing-rendering-a-triangle/barycentric-coordinates?fbclid=IwAR3g6PQJi3Peu65GnRrqXN1VsIaOR-TL8af9L1eOvXRfH3ZjQpot0CvQSbk
 		Vec3f normal = ray.u * m_na + ray.v * m_nb + (1 - ray.u - ray.v) * m_nc;
 		normal = normalize(normal);
 		return normal;

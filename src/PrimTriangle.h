@@ -60,19 +60,24 @@ public:
 		// ray.v = ...
 
 		//let's try this first
+		//reference: https://www.scratchapixel.com/lessons/3d-basic-rendering/ray-tracing-rendering-a-triangle/barycentric-coordinates?fbclid=IwAR3g6PQJi3Peu65GnRrqXN1VsIaOR-TL8af9L1eOvXRfH3ZjQpot0CvQSbk
+
+		//Variables are put in conjunction with example given in the website
+		//This part of code may be same/similar to other people referencing from same/similar website
 		Vec3f p = ray.org + f * ray.dir;
 		Vec3f AC = m_c - m_a;
 		Vec3f BC = m_c - m_b;
-		float area = norm(edge1.cross(edge2));
+		float area = norm(edge1.cross(edge2)); //area of the triangle
 
 		Vec3f Vec_AP = p - m_a;
 		Vec3f Vec_BP = p - m_b;
-		float area_U = norm(Vec_BP.cross(BC));
-		ray.u = area_U / area;
+		float area_u = norm(Vec_BP.cross(BC)); //area of shaded region u in the website
+		ray.u = area_u / area;
 
-		float area_V = norm(Vec_AP.cross(AC));
-		ray.v = area_V / area;
+		float area_v = norm(Vec_AP.cross(AC)); //area of shaded region v in website
+		ray.v = area_v / area;
 
+		//now we have baycentric coordinates u, v as ray.u, ray.v (we will use it later in PrimTriangleSmooth and similar files)
 		ray.t = f;
 		ray.hit = this;
 		return true;
